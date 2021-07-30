@@ -1,9 +1,7 @@
 # bot.py
 import discord
-
 import os
 from dotenv import load_dotenv
-
 import random
 
 client = discord.Client()
@@ -26,7 +24,12 @@ async def on_ready():
     file.close()
 
 
-
+@client.event
+async def on_guild_join(guild):
+    for channel in guild.text_channels:
+        if channel.permissions_for(guild.me).send_messages:
+            await channel.send('Hey there! Type !cookie to hear your fortune')
+        break
 
 @client.event
 async def on_message(message):
@@ -34,12 +37,12 @@ async def on_message(message):
         return
 
     if message.content.startswith('!cookie'):
-
-
-
         response = "Here is your fortune: " + random.choice(fortunes)
         await message.channel.send(response)
 
+    if message.content.startswith('!help'):
+        response = "Type !cookie to hear your fortune"
+        await message.channel.send(response)
 
 load_dotenv(verbose=True)
 client.run(os.getenv('TOKEN'))
