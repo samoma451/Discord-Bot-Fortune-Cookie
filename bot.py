@@ -8,7 +8,7 @@ client = discord.Client()
 
 fortunes = []
 
-@client.event
+@client.event#sends message to python console confirming bot has logged in/ is online
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
 
@@ -24,14 +24,15 @@ async def on_ready():
     file.close()
 
 
-@client.event
+@client.event#sends a message when the bot first joins the server
 async def on_guild_join(guild):
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
             await channel.send('Hey there! Type !cookie to hear your fortune')
         break
 
-@client.event
+        
+@client.event #checks if messages are sending commands to the bot and if so, responds accordingly
 async def on_message(message):
     if message.author == client.user:
         return
